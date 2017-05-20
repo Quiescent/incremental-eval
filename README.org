@@ -1,0 +1,87 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+TITLE: README
+#+DATE: <2017-05-20 Sat>
+#+AUTHOR: Edward John Steere
+#+EMAIL: edward.steere@gmail.com
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 26.0.50 (Org mode 9.0.6)
+#+OPTIONS: html-link-use-abs-url:nil html-postamble:auto
+#+OPTIONS: html-preamble:t html-scripts:t html-style:t
+#+OPTIONS: html5-fancy:nil tex:t
+#+HTML_DOCTYPE: xhtml-strict
+#+HTML_CONTAINER: div
+#+DESCRIPTION:
+#+KEYWORDS:
+#+HTML_LINK_HOME:
+#+HTML_LINK_UP:
+#+HTML_MATHJAX:
+#+HTML_HEAD:
+#+HTML_HEAD_EXTRA:
+#+SUBTITLE:
+#+INFOJS_OPT:
+#+CREATOR: <a href="http://www.gnu.org/software/emacs/">Emacs</a> 26.0.50 (<a href="http://orgmode.org">Org</a> mode 9.0.6)
+#+LATEX_HEADER:
+
+* Introduction
+This is incremental eval a handy utility for watching your code
+evaluate in many Lisps!  That's the plan anyway but at the moment I've
+only implemented very limited support for Emacs Lisp.
+
+What is incremental evaluation?  It's exactly what it says on the box:
+eval things step by step.  Lisp evaluation is quite simple, unless you
+encounter conditional branching, a macro or a special form you can
+simply keep going forwards down lists until you can't anymore, then go
+backwards up list, grab the symbolic expression which follows the
+point and evaluate it.  You can replace the symbolic expression you
+just evaluated with the result you just got.  If you keep doing this
+(and handle special forms etc. with their special rules) then you'll
+eventually evaluate the whole expression.
+
+This package allows you to watch this left to right bottom to top
+evaluation happening!  Simply invoke =incremental-eval= with the point
+either:
+ - inside an symbolic expression
+ - after an symbolic expression
+ - with a region highlighting an symbolic expression
+It'll pick up the relevant region to operate on and make it read-only.
+Then you can hit =n=, =p= or =q= to evaluate the next symbolic
+expression, go backwards in the history of evaluations or quit,
+restoring the original state.
+
+* Planned Features
+If you have ideas for new features, then feel free to update this
+README and make a pull request.
+
+** Incremental Eval of Functions
+The idea here is to ask for values for each of the parameters for a
+function from users and then evaluate the body of the function
+incrementally with the parameters bound to the supplied values.  This
+would allow you to quickly see how your functions work without needing
+to update them whatever REPL/environment you're working with.
+
+I think that something like replacing the function with a =let= form
+should work, but it relies on the implementation of let support being
+incremental.
+
+* Missing Stuff
+ - [ ] determining whether a form is a macro is not implemented for
+   Emacs Lisp
+ - [ ] determining whether a form is a conditional is not implemented
+   for Emacs Lisp
+ - [ ] handling special forms such as let is not implemented
+ - [ ] support for other lisps is missing (feel free to add it!) :)
+   I'd like to have support for at least Clojure and Common Lisp
+   before submitting this to ELPA
+
+* Known Issues
+ - [ ] history does not work (i.e. hitting =p= will currently cause an
+   error or do nothing)
+ - [ ] when the form is evaluated to it's simplest form, the overlay
+   occupies a region of zero size and can't be "quitted" without first
+   undoing to make it longer first
