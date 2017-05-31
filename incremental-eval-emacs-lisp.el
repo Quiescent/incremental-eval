@@ -4,6 +4,11 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (add-to-list 'load-path "."))
+
+(require 'incremental-eval-interface)
+
 (defun incremenatl-eval-setup-emacs-lisp ()
   "Setup Emacs Lisp mode for incremental eval mode."
   (interactive)

@@ -27,6 +27,7 @@
 #+INFOJS_OPT:
 #+CREATOR: <a href="http://www.gnu.org/software/emacs/">Emacs</a> 26.0.50 (<a href="http://orgmode.org">Org</a> mode 9.0.6)
 #+LATEX_HEADER:
+#+STARTUP: showall
 
 * Introduction
 This is incremental eval a handy utility for watching your code
@@ -54,11 +55,15 @@ Then you can hit =n=, =p= or =q= to evaluate the next symbolic
 expression, go backwards in the history of evaluations or quit,
 restoring the original state.
 
+With a universal argument the evaluation will start from the fully
+evaluated form.  You can then hit =p= to go backwards and watch it all
+happen in reverse.
+
 * Planned Features
 If you have ideas for new features, then feel free to update this
 README and make a pull request.
 
-** Incremental Eval of Functions
+** TODO Incremental Eval of Functions
 The idea here is to ask for values for each of the parameters for a
 function from users and then evaluate the body of the function
 incrementally with the parameters bound to the supplied values.  This
@@ -68,20 +73,48 @@ to update them whatever REPL/environment you're working with.
 I think that something like replacing the function with a =let= form
 should work, but it relies on the implementation of let support being
 incremental.
-
+** DONE Start From the Bottom
+   CLOSED: [2017-06-18 Sun 10:18]
+   :LOGBOOK:
+   - CLOSING NOTE [2017-06-18 Sun 10:18] \\
+     Also added with this feature is the "done" property on Incremental
+     Eval overlays.  This is used to determine when evaluation is complete
+     and stop the engine from going further.
+   :END:
+With a universal argument it should start from the fully evaluated
+form and work it's way backwards.
+** DONE Timed Playback
+   CLOSED: [2017-06-18 Sun 10:41]
+   :LOGBOOK:
+   - CLOSING NOTE [2017-06-18 Sun 10:41] \\
+     Added with run-at-time and stops running when done.  It remembers the
+     current overlay so that it can move to it if the user was silly and
+     clicked somewhere else while it was executing.  As a result you can't
+     have more than one going at a time (could have one per buffer with
+     some more work) and it's not thread safe.
+   :END:
+The idea here is to basically keep going forward with a delay between
+each evaluation.
 * Missing Stuff
- - [ ] determining whether a form is a macro is not implemented for
-   Emacs Lisp
- - [ ] determining whether a form is a conditional is not implemented
-   for Emacs Lisp
- - [ ] handling special forms such as let is not implemented
- - [ ] support for other lisps is missing (feel free to add it!) :)
-   I'd like to have support for at least Clojure and Common Lisp
-   before submitting this to ELPA
-
+*** TODO Detect Macros (Emacs Lisp)
+Determining whether a form is a macro is not implemented for Emacs
+Lisp
+*** TODO Detect Conditionals (Emacs Lisp)
+Determining whether a form is a conditional is not implemented
+for Emacs Lisp
+*** TODO Handle Lexical Environments
+Handle lexical environments so that evaluation of forms within let is
+correct.
+*** TODO Handle Conditionals
+Handle conditional evaluation so that the form is substituted with the
+correct branch where relevant.
+*** TODO Support Other Lisps
+Support for other lisps is missing (feel free to add it!) :) I'd like
+to have support for at least Clojure and Common Lisp before submitting
+this to ELPA
 * Known Issues
- - [ ] history does not work (i.e. hitting =p= will currently cause an
+ - [X] history does not work (i.e. hitting =p= will currently cause an
    error or do nothing)
- - [ ] when the form is evaluated to it's simplest form, the overlay
+ - [X] when the form is evaluated to it's simplest form, the overlay
    occupies a region of zero size and can't be "quitted" without first
    undoing to make it longer first
