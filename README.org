@@ -95,6 +95,10 @@ form and work it's way backwards.
    :END:
 The idea here is to basically keep going forward with a delay between
 each evaluation.
+* Found stuff ( feature list )
+** Side-impacting function ( aka side-affects )
+When we bump into a symbol with a a known side-affect, we'll prompt for an action. You can..
+
 * Missing Stuff
 *** TODO Detect Macros (Emacs Lisp)
 Determining whether a form is a macro is not implemented for Emacs

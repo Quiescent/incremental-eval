@@ -1,5 +1,9 @@
 # Editor files
 *~
 
+# For messing around in...
+tmp.elisp
+
 # Compiled files
 *.elc
+/tmp.el

@@ -9,6 +9,8 @@
 
 (require 'incremental-eval-interface)
 
+(defvar incremental-eval-emacs-lisp-impacts '(message) "A list of symbols TOOD which you want to make a decision.")
+
 (defun incremenatl-eval-setup-emacs-lisp ()
   "Setup Emacs Lisp mode for incremental eval mode."
   (interactive)
@@ -19,7 +21,20 @@
 
 (defun incremental-eval-emacs-lisp (string-expression)
   "Evauate STRING-EXPRESSION using read and eval."
+  (if (incremental-eval--side-impact-p string-expression)
+    (when (should-continue-prompt) (incremental-eval--eval string-expression))
+    (incremental-eval--eval string-expression)))
+
+(defun incremental-eval--eval (string-expression)
+  "Read and evaluate STRING-EXPRESSION."
   (eval (read string-expression)))
+
+(defun incremental-eval--should-continue-prompt ()
+  (y-or-n-p (format "Do you want to eval: %s")))
+
+(defun incremental-eval--side-impact-p (str)
+  ;;  TODO
+  t)
 
 (defun incremental-eval-next-form-is-a-macro-emacs-lisp-p ()
   "Produce t if the next form is a macro in Emacs Lisp.
